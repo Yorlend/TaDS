@@ -3,6 +3,12 @@
 #include <stdio.h>
 
 
+/**
+ * Функция обмена двух символов
+ * 
+ * \param[in] d1 первый символ
+ * \param[in] d2 второй символ
+ */
 static void swap_digits(char* d1, char* d2)
 {
     if (*d1 != *d2)
@@ -13,6 +19,12 @@ static void swap_digits(char* d1, char* d2)
     }
 }
 
+/**
+ * Функция удаления символа из строки по индексу
+ * 
+ * \param[out] str строка, из которой происходит удаление
+ * \param[in] ind индекс символа, подлежащего удалению
+ */
 static void remove_digit(char* str, uint8_t ind)
 {
     uint8_t len = strlen(str);
@@ -23,6 +35,11 @@ static void remove_digit(char* str, uint8_t ind)
     str[len] = '\0';
 }
 
+/**
+ * Функция округления числа
+ * 
+ * \param[in] num указатель на число (тип exp_float_t*)
+ */
 static void round_exp(exp_float_t* num)
 {
     if (num->mantissa[MAX_MANT] >= '5')
@@ -36,6 +53,15 @@ static void round_exp(exp_float_t* num)
     num->mantissa[MAX_MANT] = '\0';
 }
 
+/**
+ * Функция умножения двух разрядов
+ * 
+ * \param[in] c1 первый символ
+ * \param[in] с2 второй символ
+ * \param[out] r остаток
+ * 
+ * \return значение последнего разряда при умножении
+ */
 static uint8_t mul_chars(char c1, char c2, uint8_t* r)
 {
     uint8_t d1 = c1 - '0', d2 = c2 - '0', res = d1 * d2 + *r;
@@ -44,14 +70,27 @@ static uint8_t mul_chars(char c1, char c2, uint8_t* r)
     return res % 10;
 }
 
-static char mul_signs(char sig1, char sig2)
+/**
+ * Функция определения знака после умножения
+ * 
+ * \param[in] sign1 знак первого числа
+ * \param[in] sign2 знак второго числа
+ * 
+ * \return знак (+/-)
+ */
+static char mul_signs(char sign1, char sign2)
 {
-    if (sig1 == sig2)
+    if (sign1 == sign2)
         return SIGN_POSITIVE;
     else
         return SIGN_NEGATIVE;
 }
 
+/**
+ * Функция "обнуляет" значения полей числа (exp_float_t)
+ * 
+ * \param[out] num указатель на число (exp_float_t*) 
+ */
 void reset_exp_float(exp_float_t* num)
 {
     num->sign = SIGN_POSITIVE;
@@ -59,6 +98,13 @@ void reset_exp_float(exp_float_t* num)
     num->degree = 0;
 }
 
+/**
+ * Функция нормализации мантиссы и степени числа
+ * 
+ * \param[out] num указатель на число (exp_float_t*)
+ * 
+ * \return Код ошибки
+ */
 status_t normalize_exp_float(exp_float_t* num)
 {
     while (num->mantissa[0] == '0')
@@ -77,6 +123,19 @@ status_t normalize_exp_float(exp_float_t* num)
     return SUCCESS;
 }
 
+/**
+ * Функция умножения двух чисел
+ * 
+ * \param[out] res результирующее число
+ * \param[in] num1 первое число
+ * \param[in] num2 второе число
+ * 
+ * \return Код Ошибки
+ * 
+ * \details Используется алгоритм умножения чисел столбиком.
+ * \details Каждый разряд одного умножается с разрядом другого числа во вложенном цикле.
+ * \details После выполнения умножения происходит форматирование, округление и нормализация
+ */
 status_t multiply(exp_float_t* res, const exp_float_t* num1, const exp_float_t* num2)
 {
     status_t exit_code = SUCCESS;

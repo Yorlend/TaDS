@@ -4,12 +4,24 @@
 #include <string.h>
 
 
+/**
+ * Парсинг пробельных символов
+ * 
+ * \param[in] str строка для парсинга
+ */
 static void parse_space(const char** str)
 {
     while (isspace(**str))
         (*str)++;
 }
 
+/**
+ * Проверка на валидность всех символов в строке
+ * 
+ * \param[in] str строка для парсинга
+ * 
+ * \return Код Ошибки
+ */
 static status_t check_valid(const char* str)
 {
     while (*str)
@@ -21,6 +33,13 @@ static status_t check_valid(const char* str)
     return SUCCESS;
 }
 
+/**
+ * Парсинг незначащих нулей
+ * 
+ * \param[in] str строка для парсинга
+ * 
+ * \return значение флага (удалялись ли нули)
+ */
 static uint8_t parse_leading_zeros(const char** str)
 {
     uint8_t flag = 0;
@@ -34,6 +53,17 @@ static uint8_t parse_leading_zeros(const char** str)
     return flag;
 }
 
+/**
+ * Парсинг мантиссы
+ * 
+ * \param[out] num указатель на число (тип exp_float*)
+ * \param[out] p_pos позиция точки в строке
+ * \param[in] str строка для парсинга
+ * 
+ * \return Код Ошибки
+ * 
+ * \details Производит парсинг мантиссы, занося её в поле num->mantissa и запоминая позицию точки.
+ */
 static status_t parse_mantissa(exp_float_t* num, const char** str, uint8_t* p_pos)
 {
     uint8_t point_count = 0;
@@ -72,6 +102,12 @@ static status_t parse_mantissa(exp_float_t* num, const char** str, uint8_t* p_po
     return SUCCESS;
 }
 
+/**
+ * Парсинг знака
+ * 
+ * \param[out] num указатель на число (тип exp_float_t*)
+ * \param[in] str строка для парсинга
+ */
 static void parse_sign(exp_float_t* num, const char** str)
 {
     parse_space(str);
@@ -84,6 +120,14 @@ static void parse_sign(exp_float_t* num, const char** str)
     }
 }
 
+/**
+ * Парсинг степени
+ * 
+ * \param[out] num указатель на число (тип exp_float_t*)
+ * \param[in] str строка для парсинга
+ * 
+ * \return Код Ошибки
+ */
 static status_t parse_degree(exp_float_t* num, const char** str)
 {
     char buf[MAX_DEG_DIGITS + 1] = "";
@@ -127,6 +171,17 @@ static status_t parse_degree(exp_float_t* num, const char** str)
     return INPUT_ERROR;
 }
 
+/**
+ * Парсинг числа
+ * 
+ * \param[out] num указатель на число (тип exp_float_t*)
+ * \param[in] str строка для парсинга
+ * 
+ * \return Код Ошибки
+ * 
+ * \details В данной функции осуществляется парсинг числа и первичная проверка на переполнение проверка
+ * \details выполняется в данной функции, чтобы не хранить положение точки в структуре exp_float_t
+ */
 status_t parse_exp_float(exp_float_t* num, const char* str)
 {
     status_t exit_code = check_valid(str);

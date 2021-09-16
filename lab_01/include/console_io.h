@@ -5,6 +5,7 @@
 #include "exp_float.h"
 
 
+void print_rules();
 status_t input_number(exp_float_t* num);
 void output_number(const exp_float_t* num);
 
