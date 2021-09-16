@@ -7,6 +7,7 @@ typedef enum status
     INPUT_ERROR,        // Недопустимые символы
     MANTISSA_OVERFLOW,  // Переполнение мантиссы при вводе
     DEGREE_OVERFLOW,    // Переполнение степени числа
+    DEGREE_UNDERFLOW,   // Машинный нуль
     OVERFLOW_ERROR,     // Переполнение буфера
     POINTS_ERROR,       // Более одной точки
     EMPTY_ERROR         // Встречена пустая мантисса

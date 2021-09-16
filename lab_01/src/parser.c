@@ -10,6 +10,17 @@ static void parse_space(const char** str)
         (*str)++;
 }
 
+static status_t check_valid(const char* str)
+{
+    while (*str)
+    {
+        if (strchr(DIGITS "+-.eE \t\n", *str) == NULL)
+            return INPUT_ERROR;
+        str++;
+    }
+    return SUCCESS;
+}
+
 static uint8_t parse_leading_zeros(const char** str)
 {
     uint8_t flag = 0;
@@ -54,18 +65,10 @@ static status_t parse_mantissa(exp_float_t* num, const char** str, uint8_t* p_po
 
     num->mantissa[index] = '\0';
 
-
     if (!flag && strlen(num->mantissa) == 0)
         return EMPTY_ERROR;
 
     parse_space(str);
-    if (**str == '\0')
-        return SUCCESS;
-
-    if (**str != 'e' && **str != 'E')
-        return INPUT_ERROR;
-
-    (*str)++;
     return SUCCESS;
 }
 
@@ -87,18 +90,20 @@ static status_t parse_degree(exp_float_t* num, const char** str)
     char sign = SIGN_POSITIVE;
 
     parse_space(str);
-    
-    parse_leading_zeros(str);
-    
+
     if (**str == '\0')
         return SUCCESS;
     
-    if (**str == SIGN_NEGATIVE || **str == SIGN_POSITIVE)
-    {
-        sign = **str;
-        (*str)++;
-    }
+    if (**str != 'e' && **str != 'E')
+        return INPUT_ERROR;
+    (*str)++;
 
+    parse_space(str);
+    
+    if (**str == SIGN_NEGATIVE || **str == SIGN_POSITIVE)
+        sign = *((*str)++);
+
+    parse_space(str);
     parse_leading_zeros(str);
 
     uint8_t index = 0;
@@ -124,11 +129,12 @@ static status_t parse_degree(exp_float_t* num, const char** str)
 
 status_t parse_exp_float(exp_float_t* num, const char* str)
 {
-    status_t exit_code = SUCCESS;
+    status_t exit_code = check_valid(str);
 
     parse_sign(num, &str);
     uint8_t point_pos = MAX_MANT;
-    if (((exit_code = parse_mantissa(num, &str, &point_pos)) == SUCCESS) &&\
+    if (exit_code == SUCCESS &&\
+        ((exit_code = parse_mantissa(num, &str, &point_pos)) == SUCCESS) &&\
         ((exit_code = parse_degree(num, &str)) == SUCCESS))
     {
         if (point_pos >= MAX_MANT)
