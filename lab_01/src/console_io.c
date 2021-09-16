@@ -13,6 +13,7 @@ static void entry_instruction()
 
 status_t input_number(exp_float_t* num)
 {
+    status_t exit_code = SUCCESS;
     char str[MAX_STR + 1] = "";
     char* p = NULL;
     entry_instruction();
@@ -21,16 +22,21 @@ status_t input_number(exp_float_t* num)
     printf("%31s±|--------|---------|---------|e±|---|\n", "");
     printf("Введите действительное число:  ");
     if (fgets(str, MAX_STR + 1, stdin) == NULL || (int)strlen(str) > MAX_STR)
-        return INPUT_ERROR;
+        exit_code = OVERFLOW_ERROR;
 
     if ((p = strchr(str, '\n')))
         *p = '\0';
 
-    reset_exp_float(num);
-    parse_exp_float(num, str);
-    normalize_exp_float(num);
+    if (exit_code == SUCCESS)
+    {
+        reset_exp_float(num);
+        exit_code = parse_exp_float(num, str);
+    }
+
+    if (exit_code == SUCCESS)
+        exit_code = normalize_exp_float(num);
     
-    return SUCCESS;
+    return exit_code;
 }
 
 void output_number(const exp_float_t* num)

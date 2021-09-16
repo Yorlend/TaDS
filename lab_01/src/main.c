@@ -8,8 +8,12 @@ int main(void)
     status_t exit_code = SUCCESS;
     exp_float_t num;
 
-    input_number(&num);
-    output_number(&num);
+    exit_code = input_number(&num);
 
+    if (exit_code == SUCCESS)
+        output_number(&num);
+
+    else
+        print_status(exit_code);
     return exit_code;
 }

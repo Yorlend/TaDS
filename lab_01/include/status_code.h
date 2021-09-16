@@ -3,9 +3,13 @@
 
 typedef enum status
 {
-    SUCCESS,
-    INPUT_ERROR,
-    OVERFLOW_ERROR
+    SUCCESS,            // Успешное завершение
+    INPUT_ERROR,        // Недопустимые символы
+    MANTISSA_OVERFLOW,  // Переполнение мантиссы при вводе
+    DEGREE_OVERFLOW,    // Переполнение степени числа
+    OVERFLOW_ERROR,     // Переполнение буфера
+    POINTS_ERROR,       // Более одной точки
+    EMPTY_ERROR         // Встречена пустая мантисса
 } status_t;
 
 void print_status(status_t status);
