@@ -143,29 +143,39 @@ status_t multiply(exp_float_t* res, const exp_float_t* num1, const exp_float_t* 
 
     uint8_t remainder;
     uint8_t tmp = 0;
+
+    // Цикл по всем символам num1 с конца
     for (int8_t i = strlen(num1->mantissa) - 1; i >= 0; i--)
     {
-        remainder = 0;
+        remainder = 0; // остаток
+        // Цикл по всем символам num2 с конца  
         for (int8_t j = strlen(num2->mantissa) - 1; j >= 0; j--)
         {
+            // значение результирующего разряда в tmp, remainder хранит остаток
             tmp = mul_chars(num1->mantissa[i], num2->mantissa[j], &remainder);
             if (res->mantissa[i + j + 1] + tmp > 9)
                 remainder++;
             res->mantissa[i + j + 1] = (res->mantissa[i + j + 1] + tmp) % 10;
         }
+        // "переполнение" остатка
         res->mantissa[i] += remainder;
     }
 
     int8_t flag = 0;
+    // преобразование из массива цифр в массив символов
     for (int8_t i = MAX_MANT * 2 - 1; i >= 0; i--)
         if (flag || (res->mantissa[i] != '\0' && (flag = 1)))
             res->mantissa[i] += '0';
 
+    // определение знака результирующего числа
     res->sign = mul_signs(num1->sign, num2->sign);
+    // определение степени результирующего числа
     res->degree = num1->degree + num2->degree;
 
+    // удаление незначащих нулей и проверка степени
     exit_code = normalize_exp_float(res);
 
+    // округление, если требуется
     if (exit_code == SUCCESS && strlen(res->mantissa) > MAX_MANT)
         round_exp(res);
 
