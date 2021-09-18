@@ -105,7 +105,7 @@ void reset_exp_float(exp_float_t* num)
  * 
  * \return Код ошибки
  */
-status_t normalize_exp_float(exp_float_t* num)
+void normalize_exp_float(exp_float_t* num)
 {
     while (num->mantissa[0] == '0')
     {
@@ -115,7 +115,10 @@ status_t normalize_exp_float(exp_float_t* num)
 
     if (num->mantissa[0] == '\0')
         num->degree = 0;
+}
 
+status_t check_degree(const exp_float_t* num)
+{
     if (num->degree > MAX_DEG)
         return DEGREE_OVERFLOW;
     else if (num->degree < -MAX_DEG)
@@ -172,12 +175,16 @@ status_t multiply(exp_float_t* res, const exp_float_t* num1, const exp_float_t* 
     // определение степени результирующего числа
     res->degree = num1->degree + num2->degree;
 
-    // удаление незначащих нулей и проверка степени
-    exit_code = normalize_exp_float(res);
+    // удаление незначащих нулей
+    normalize_exp_float(res);
 
     // округление, если требуется
     if (exit_code == SUCCESS && strlen(res->mantissa) > MAX_MANT)
         round_exp(res);
+
+    if (exit_code == SUCCESS)
+    exit_code = check_degree(res);
+        
 
     return exit_code;
 }

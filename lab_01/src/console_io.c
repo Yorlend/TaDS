@@ -46,7 +46,7 @@ status_t input_number(exp_float_t* num)
     }
 
     if (exit_code == SUCCESS)
-        exit_code = normalize_exp_float(num);
+        normalize_exp_float(num);
     
     return exit_code;
 }

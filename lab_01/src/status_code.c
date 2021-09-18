@@ -21,6 +21,10 @@ void print_status(status_t status)
         printf("ПЕРЕПОЛНЕНИЕ СТЕПЕНИ\n");
         break;
 
+    case DEGREE_UNDERFLOW:
+        printf("МАШИННЫЙ НУЛЬ\n");
+        break;
+
     case OVERFLOW_ERROR:
         printf("ПЕРЕПОЛНЕНИЕ СТРОКИ, ВВЕДИТЕ МЕНЕЕ %d СИМВОЛОВ\n", MAX_STR);
         break;

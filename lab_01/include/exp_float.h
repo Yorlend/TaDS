@@ -15,7 +15,8 @@ typedef struct
 } exp_float_t;
 
 void reset_exp_float(exp_float_t* num);
-status_t normalize_exp_float(exp_float_t* num);
+void normalize_exp_float(exp_float_t* num);
+status_t check_degree(const exp_float_t* num);
 
 status_t multiply(exp_float_t* res, const exp_float_t* num1, const exp_float_t* num2);
 
