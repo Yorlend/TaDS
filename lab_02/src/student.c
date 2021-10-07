@@ -10,6 +10,40 @@
 #include <stdlib.h>
 
 
+bool stud_valid(const student_t* stud)
+{
+    if (stud == NULL)
+        return false;
+    
+    if (strlen(stud->surname) == 0 ||
+        strlen(stud->name) == 0 ||
+        strlen(stud->group) == 0)
+        return false;
+    
+    if (stud->gender == UNDEFINED)
+        return false;
+    
+    if (stud->age > 122 || stud->age < 7)
+        return false;
+    
+    if (stud->avg_score < 2 || stud->avg_score > 5)
+        return false;
+
+    if (!date_valid(&stud->enroll_date))
+        return false;
+
+    if (stud->house == UNKNOWN)
+        return false;
+    
+    if (stud->house == DORM && !dorm_valid(&stud->housing.dorm))
+        return false;
+
+    if (stud->house == APPARTMENT && !apt_valid(&stud->housing.appartment))
+        return false;
+
+    return true;
+}
+
 static bool read_string(char* buf, size_t size, char* src)
 {
     if (strlen(src) >= size)
@@ -33,8 +67,14 @@ static bool read_uint(uint8_t* num, const char* str)
 {
     if (str == NULL)
         return false;
+
+    char* ptr;
     
-    *num = atoi(str);
+    *num = strtol(str, &ptr, 10);
+
+    if (*ptr != '\0')
+        return false;
+
     return true;
 }
 
@@ -42,8 +82,14 @@ static bool read_double(double* num, const char* str)
 {
     if (str == NULL)
         return false;
+
+    char* ptr;
     
-    *num = atof(str);
+    *num = strtod(str, &ptr);
+
+    if (*ptr != '\0')
+        return false;
+
     return true;
 }
 
@@ -79,19 +125,19 @@ static bool read_address(student_t* stud, const char* str)
     return true;
 }
 
-void stud_write_row(const student_t* stud)
-{
-    printf("|%10s|%10s|%s|%s|%u|%.2lf|%s|%10s|",
-        stud->surname, stud->name, stud->group,
-        gender_to_str(stud->gender), stud->age,
-        stud->avg_score, date_to_str(&stud->enroll_date),
-        housing_to_str(stud->house));
+// void stud_write_row(const student_t* stud)
+// {
+//     printf("|%10s|%10s|%s|%s|%u|%.2lf|%s|%10s|",
+//         stud->surname, stud->name, stud->group,
+//         gender_to_str(stud->gender), stud->age,
+//         stud->avg_score, date_to_str(&stud->enroll_date),
+//         housing_to_str(stud->house));
     
-    if (stud->house == DORM)
-    {
-        printf("||\n");
-    }
-}
+//     if (stud->house == DORM)
+//     {
+//         printf("||\n");
+//     }
+// }
 
 /**
  * Ожидаемый формат ввода:
@@ -173,6 +219,9 @@ status_t read_student(student_t* stud, const char* str)
         free(buf);
     }
 
+    if (status == SUCCESS && !stud_valid(stud))
+        status = STUD_ERROR;
+        
     return status;
 }
 
@@ -187,5 +236,208 @@ status_t read_student_f(student_t* stud, FILE* file)
         status = read_student(stud, line);
 
     free(line);
+    return status;
+}
+
+static status_t input_str(const char* prompt, char* dst, size_t dst_size)
+{
+    status_t status = INPUT_ERROR;
+    char* buf = NULL;
+    size_t size = 0;
+
+    printf("%s", prompt);
+    if (getline(&buf, &size, stdin) >= 0)
+    {
+        *strchr(buf, '\n') = '\0';
+        if (strlen(buf) < dst_size)
+        {
+            strcpy(dst, buf);
+            status = SUCCESS;
+        }
+    }
+
+    free(buf);
+    return status;
+}
+
+static status_t input_gender(const char* prompt, gender_t* gender)
+{
+    status_t status = SUCCESS;
+    char tmp[MAX_STR] = "";
+
+    status = input_str(prompt, tmp, MAX_STR);
+    *gender = str_to_gender(tmp);
+
+    if (*gender == UNDEFINED)
+        status = STUD_ERROR;
+
+    return status;
+}
+
+static status_t input_uint(const char* prompt, uint16_t* unum)
+{
+    status_t status = SUCCESS;
+    char tmp[MAX_STR] = "";
+
+    char* ptr;
+
+    status = input_str(prompt, tmp, MAX_STR);
+    *unum = strtol(tmp, &ptr, 10);
+
+    if (*ptr != '\0')
+        status = INPUT_ERROR;
+
+    return status;
+}
+
+static status_t input_double(const char* prompt, double* dnum)
+{
+    status_t status = SUCCESS;
+    char tmp[MAX_STR] = "";
+
+    char* ptr;
+
+    status = input_str(prompt, tmp, MAX_STR);
+    *dnum = strtod(tmp, &ptr);
+
+    if (*ptr != '\0')
+        status = INPUT_ERROR;
+
+    if (*dnum < 2 || *dnum > 5)
+        status = STUD_ERROR;
+
+    return status;
+}
+
+static status_t input_date(const char* prompt, date_t* date)
+{
+    status_t status = SUCCESS;
+    char tmp[MAX_STR] = "";
+
+    status = input_str(prompt, tmp, MAX_STR);
+    *date = str_to_date(tmp);
+
+    if (!date_valid(date))
+        status = STUD_ERROR;
+
+    return status;
+}
+
+static status_t input_house(const char* prompt, housing_t* house)
+{
+    status_t status = SUCCESS;
+    char tmp[MAX_STR] = "";
+
+    status = input_str(prompt, tmp, MAX_STR);
+    *house = str_to_housing(tmp);
+
+    if (*house == UNKNOWN)
+        status = STUD_ERROR;
+
+    return status;
+}
+
+static status_t input_address(student_t* stud)
+{
+    status_t status = SUCCESS;
+
+    if (stud->house == DORM)
+    {
+        status = input_uint("Input dorm number [1..10]: ", &stud->housing.dorm.number);
+
+        if (status == SUCCESS)
+            status = input_uint("Input room number [1..899]: ", &stud->housing.dorm.room);
+    }
+
+    if (stud->house == APPARTMENT)
+    {
+        status = input_str("Input street: ", stud->housing.appartment.street, MAX_STR);
+
+        if (status == SUCCESS)
+            status = input_uint("Input house number [1..89]: ", stud->housing.appartment.house);
+
+        if (status == SUCCESS)
+            status = input_uint("Input appartment number [1..999]: ", stud->housing.appartment.appt_num);
+    }
+
+    return status;
+}
+
+status_t input_student(student_t* stud)
+{
+    status_t status = SUCCESS;
+    char tmp[MAX_STR] = "";
+
+    status = input_str("Input stundent's surname: ", stud->surname, MAX_STR);
+
+    if (status != SUCCESS)
+    {
+        printf("Surname is not correct, check input data\n");
+        return status;
+    }
+
+    status = input_str("Input name: ", stud->name, MAX_STR);
+
+    if (status != SUCCESS)
+    {
+        printf("Name is not correct, check input data\n");
+        return status;
+    }
+
+    status = input_str("Input group: ", stud->group, MAX_STR);
+
+    if (status != SUCCESS)
+    {
+        printf("Group is not correct, check input data\n");
+        return status;
+    }
+
+    status = input_gender("Input gender (M/F; MALE/FEMALE): ", &stud->gender);
+
+    if (status != SUCCESS)
+    {
+        printf("Gender is not correct, check input data\n");
+        return status;
+    }
+
+    status = input_uint("Input age: ", &stud->age);
+
+    if (status != SUCCESS || stud->age < 7 || stud->age > 122)
+    {
+        printf("Age is not correct, check input data\n");
+        return INPUT_ERROR;
+    }
+    status = input_double("Input average score: ", &stud->avg_score);
+
+    if (status != SUCCESS)
+    {
+        printf("Average score is not correct, check input data\n");
+        return status;
+    }
+
+    status = input_date("Input enroll date (DD.MM.YYYY): ", &stud->enroll_date);
+
+    if (status != SUCCESS)
+    {
+        printf("Date is not correct, check input data\n");
+        return status;
+    }
+
+    status = input_house("Input house type (dorm/appartment): ", &stud->house);
+
+    if (status != SUCCESS)
+    {
+        printf("House type is not correct, check input data\n");
+        return status;
+    }
+
+    status = input_address(stud);
+
+    if (status != SUCCESS)
+    {
+        printf("House info is not correct, check input data\n");
+        return status;
+    }
+
     return status;
 }

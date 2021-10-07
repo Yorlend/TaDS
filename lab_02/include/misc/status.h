@@ -8,7 +8,9 @@ typedef enum
     FILE_ERROR,
     TABLE_ERROR,
     INPUT_ERROR,
-    MEMORY_ERROR
+    MEMORY_ERROR,
+    STUD_ERROR,
+    FUNC_ARGS_ERROR,
 } status_t;
 
 #endif // _STATUS_H_

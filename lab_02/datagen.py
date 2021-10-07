@@ -13,7 +13,7 @@ names_m = "Ivan Petya Sidor Maksim Vitya Vlad".split()
 names_f = "Masha Sonya Tanya Eva Nadya".split()
 names = {"M": names_m, "F": names_f}
 
-groups = [f"UI7-{i}{j}B" for i, j in product(range(1, 9), range(1, 7))]
+groups = [f"IU7-{i}{j}B" for i, j in product(range(1, 9), range(1, 7))]
 
 streets = "Ladozhskaya Parkovaya Olenevskaya Kostritskaya Krasnaya Izmaylovskaya Tverskaya".split()
 

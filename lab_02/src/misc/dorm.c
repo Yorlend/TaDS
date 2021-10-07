@@ -13,6 +13,12 @@
 
 bool dorm_valid(const dorm_t* dorm)
 {
+    if (dorm->number < 1 || dorm->number > 10)
+        return false;
+
+    if (dorm->room < 1 || dorm->room > 899)
+        return false;
+
     return true;
 }
 

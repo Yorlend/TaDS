@@ -9,11 +9,11 @@
 typedef struct
 {
     char street[MAX_STR];
-    uint8_t house;
+    uint16_t house;
     uint16_t appt_num;
 } appartment_t;
 
-bool appartment_valid(const appartment_t* apt);
+bool apt_valid(const appartment_t* apt);
 appartment_t str_to_apt(const char* str);
 
 #endif // _APPARTMENT_H_

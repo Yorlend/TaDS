@@ -9,9 +9,18 @@
 #include <string.h>
 
 
-bool appartment_valid(const appartment_t* apt)
+bool apt_valid(const appartment_t* apt)
 {
-    return strlen(apt->street) != 0;
+    if (strlen(apt->street) == 0)
+        return false;
+    
+    if (apt->house > 89 || apt->house < 1)
+        return false;
+
+    if (apt->appt_num > 999 || apt->appt_num < 1)
+        return false;
+
+    return true;
 }
 
 appartment_t str_to_apt(const char* str)

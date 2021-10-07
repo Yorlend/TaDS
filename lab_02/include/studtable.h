@@ -23,6 +23,9 @@ bool stable_valid(const studtable_t* table);
 status_t stable_load(studtable_t* table, const char* filename);
 status_t stable_loadf(studtable_t* table, FILE* file);
 
+status_t stable_push_back(studtable_t* table, const student_t* stud);
+status_t stable_remove(studtable_t* table, size_t id);
+
 void stable_print(const studtable_t* table);
 
 #endif // _AUTOTABLE_H_

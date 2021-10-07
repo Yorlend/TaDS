@@ -3,14 +3,15 @@
 
 #include "constants.h"
 #include <stdbool.h>
+#include <stdint.h>
 
 
 #define DELIM ","
 
 typedef struct
 {
-    unsigned int number;
-    unsigned int room;
+    uint16_t number;
+    uint16_t room;
 } dorm_t;
 
 bool dorm_valid(const dorm_t* dorm);

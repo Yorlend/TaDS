@@ -36,7 +36,7 @@ void stable_destroy(studtable_t* table)
 
 bool stable_valid(const studtable_t* table)
 {
-    return table->data != NULL && table->size > 0;
+    return table != NULL && table->data != NULL && table->size > 0;
 }
 
 status_t stable_load(studtable_t* table, const char* filename)
@@ -90,10 +90,44 @@ status_t stable_loadf(studtable_t* table, FILE* file)
     return status;
 }
 
-static void _stud_row_print(const student_t* stud)
+status_t stable_push_back(studtable_t* table, const student_t* stud)
 {
-    printf("\033[32;40m│%11s│%8s│%9s│ %1s │ %3d │ %5.2lf │%s│%7s│",
-        stud->surname, stud->name, stud->group, gender_to_str(stud->gender),
+    if (!stable_valid(table) || !stud_valid(stud))
+        return FUNC_ARGS_ERROR;
+
+    status_t status = MEMORY_ERROR;
+
+    student_t* new_data = realloc(table->data, (table->size + 1) * sizeof(student_t));
+    if (new_data)
+    {
+        table->data = new_data;
+        table->data[table->size] = *stud;
+        table->size++;
+        status = SUCCESS;
+    }
+
+    return status;
+}
+
+status_t stable_remove(studtable_t* table, size_t id)
+{
+    if (!stable_valid(table) || id >= table->size)
+        return FUNC_ARGS_ERROR;
+
+    while(id < table->size - 1)
+    {
+        table->data[id] = table->data[id + 1];
+        id++;
+    }
+
+    table->size--;
+    return SUCCESS;
+}
+
+static void _stud_row_print(const student_t* stud, size_t id)
+{
+    printf("\033[32;40m│%4lu│%11s│%8s│%9s│ %1s │ %3d │ %5.2lf │%s│%7s│",
+        id, stud->surname, stud->name, stud->group, gender_to_str(stud->gender),
         stud->age, stud->avg_score, date_to_str(&stud->enroll_date),
         housing_to_str(stud->house)
         );
@@ -125,10 +159,10 @@ static void _stud_row_print(const student_t* stud)
 
 void stable_print(const studtable_t* table)
 {
-    printf("\033[32;40m╒═ surname ═╤═ name ═╤═ group ═╤ g ╤ age ╤ score ╤══ date ══╤ house ╤ Dno.╤ Rno.╤════ street ════╤ Hno.╤ appt.╕\033[0m\n");
+    printf("\033[32;40m╒═id═╤═ surname ═╤═ name ═╤═ group ═╤ g ╤ age ╤ score ╤══ date ══╤ house ╤ Dno.╤ Rno.╤════ street ════╤ Hno.╤ appt.╕\033[0m\n");
 
     for (size_t i = 0; i < table->size; i++)
-        _stud_row_print(table->data + i);
+        _stud_row_print(table->data + i, i);
 
-    printf("\033[32;40m└───────────┴────────┴─────────┴───┴─────┴───────┴──────────┴───────┴─────┴─────┴────────────────┴─────┴──────┘\033[0m\n");
+    printf("\033[32;40m└────┴───────────┴────────┴─────────┴───┴─────┴───────┴──────────┴───────┴─────┴─────┴────────────────┴─────┴──────┘\033[0m\n");
 }
