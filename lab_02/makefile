@@ -6,13 +6,19 @@ OBJS := $(SRCS:src/%.c=out/%.o)
 
 N := 10
 
-.PHONY: clean
+.PHONY: clean data sort_res.csv
 
 all: app.exe
 	./app.exe
 
 data:
 	@python datagen.py $(N) > data.txt && echo data has been generated!
+
+sorts: sort_res.csv
+	@python sort_graph.py sort_res.csv
+
+sort_res.csv: app.exe
+	@./sort_extracter.sh $@
 
 app.exe: $(OBJS)
 	$(CC) -o $@ $^

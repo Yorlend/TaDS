@@ -1,6 +1,7 @@
 #include "studtable.h"
 #include <stdlib.h>
 #include <string.h>
+#include "keytable.h"
 
 
 studtable_t stable_empty()
@@ -111,7 +112,7 @@ status_t stable_push_back(studtable_t* table, const student_t* stud)
 
 status_t stable_remove(studtable_t* table, size_t id)
 {
-    if (!stable_valid(table) || id >= table->size)
+    if (!stable_valid(table) || table->size == 0 || id >= table->size)
         return FUNC_ARGS_ERROR;
 
     while(id < table->size - 1)
@@ -124,10 +125,29 @@ status_t stable_remove(studtable_t* table, size_t id)
     return SUCCESS;
 }
 
+static char* _trim_str(const char* str, size_t size)
+{
+    static char buffer[MAX_STR];
+
+    if (strlen(str) <= size)
+        strcpy(buffer, str);
+    else
+    {
+        strncpy(buffer, str, size - 2);
+        buffer[size - 2] = '.';
+        buffer[size - 1] = '.';
+        buffer[size] = '\0';
+    }
+
+    return buffer;
+}
+
 static void _stud_row_print(const student_t* stud, size_t id)
 {
-    printf("\033[32;40m│%4lu│%11s│%8s│%9s│ %1s │ %3d │ %5.2lf │%s│%7s│",
-        id, stud->surname, stud->name, stud->group, gender_to_str(stud->gender),
+    printf("\033[32;40m│%4lu│%11s│", id, _trim_str(stud->surname, 11));
+    
+    printf("%8s│%9s│ %1s │ %3d │ %5.2lf │%s│%7s│",
+        _trim_str(stud->name, 8), stud->group, gender_to_str(stud->gender),
         stud->age, stud->avg_score, date_to_str(&stud->enroll_date),
         housing_to_str(stud->house)
         );
@@ -144,14 +164,14 @@ static void _stud_row_print(const student_t* stud, size_t id)
             printf("%16s", stud->housing.appartment.street);
         else
         {
-            char buf[16];
+            // char buf[16];
 
-            strncpy(buf, stud->housing.appartment.street, 14);
-            buf[14] = '.';
-            buf[15] = '.';
-            buf[16] = '\0';
+            // strncpy(buf, stud->housing.appartment.street, 14);
+            // buf[14] = '.';
+            // buf[15] = '.';
+            // buf[16] = '\0';
 
-            printf("%16s", buf);
+            printf("%16s", _trim_str(stud->housing.appartment.street, 16));
         }
         printf("│%5d│%6d│\033[0m\n", stud->housing.appartment.house, stud->housing.appartment.appt_num);
     }
@@ -159,10 +179,64 @@ static void _stud_row_print(const student_t* stud, size_t id)
 
 void stable_print(const studtable_t* table)
 {
-    printf("\033[32;40m╒═id═╤═ surname ═╤═ name ═╤═ group ═╤ g ╤ age ╤ score ╤══ date ══╤ house ╤ Dno.╤ Rno.╤════ street ════╤ Hno.╤ appt.╕\033[0m\n");
+    if (stable_valid(table))
+    {
+        printf("\033[32;40m╒═id═╤═ surname ═╤═ name ═╤═ group ═╤ g ╤ age ╤ score ╤══ date ══╤ house ╤ Dno.╤ Rno.╤════ street ════╤ Hno.╤ appt.╕\033[0m\n");
 
-    for (size_t i = 0; i < table->size; i++)
-        _stud_row_print(table->data + i, i);
+        for (size_t i = 0; i < table->size; i++)
+            _stud_row_print(table->data + i, i);
 
-    printf("\033[32;40m└────┴───────────┴────────┴─────────┴───┴─────┴───────┴──────────┴───────┴─────┴─────┴────────────────┴─────┴──────┘\033[0m\n");
+        printf("\033[32;40m└────┴───────────┴────────┴─────────┴───┴─────┴───────┴──────────┴───────┴─────┴─────┴────────────────┴─────┴──────┘\033[0m\n");
+    }
+}
+
+void stable_cond_print(studtable_t* table, uint16_t year)
+{
+    if (stable_valid(table))
+    {
+        printf("\033[32;40m╒═id═╤═ surname ═╤═ name ═╤═ group ═╤ g ╤ age ╤ score ╤══ date ══╤ house ╤ Dno.╤ Rno.╤════ street ════╤ Hno.╤ appt.╕\033[0m\n");
+
+        for (size_t i = 0; i < table->size; i++)
+        {
+            student_t stud = table->data[i];
+            if (stud.enroll_date.year == year && stud.house == DORM)
+                _stud_row_print(&stud, i);
+        }
+
+        printf("\033[32;40m└────┴───────────┴────────┴─────────┴───┴─────┴───────┴──────────┴───────┴─────┴─────┴────────────────┴─────┴──────┘\033[0m\n");
+    }
+}
+
+void stable_print_key(const studtable_t* table, const keytable_t* kt)
+{
+    if (stable_valid(table))
+    {
+        printf("\033[32;40m╒═id═╤═ surname ═╤═ name ═╤═ group ═╤ g ╤ age ╤ score ╤══ date ══╤ house ╤ Dno.╤ Rno.╤════ street ════╤ Hno.╤ appt.╕\033[0m\n");
+
+        for (size_t i = 0; i < kt->size; i++)
+        {
+            size_t id = kt->data[i].id;
+            _stud_row_print(table->data + id, id);
+        }
+
+        printf("\033[32;40m└────┴───────────┴────────┴─────────┴───┴─────┴───────┴──────────┴───────┴─────┴─────┴────────────────┴─────┴──────┘\033[0m\n");
+    }
+}
+
+static int stud_cmp(const void* stud_1, const void* stud_2)
+{
+    double score_1 = ((student_t*)stud_1)->avg_score;
+    double score_2 = ((student_t*)stud_2)->avg_score;
+
+    if (score_1 < score_2)
+        return -1;
+    else if (score_1 > score_2)
+        return 1;
+    return 0;
+}
+
+void stable_sort(studtable_t* table, sort_t sort_fn)
+{
+    if (stable_valid(table))
+        sort_fn(table->data, table->size, sizeof(student_t), stud_cmp);
 }

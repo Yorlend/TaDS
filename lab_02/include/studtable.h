@@ -5,9 +5,11 @@
 #include <stdio.h>
 #include "student.h"
 #include "misc/status.h"
+#include "keytable.h"
+#include "misc/sort.h"
 
 
-typedef struct
+typedef struct studtable
 {
     student_t* data;
     unsigned int size;
@@ -27,5 +29,10 @@ status_t stable_push_back(studtable_t* table, const student_t* stud);
 status_t stable_remove(studtable_t* table, size_t id);
 
 void stable_print(const studtable_t* table);
+void stable_cond_print(studtable_t* table, uint16_t year);
+void stable_print_key(const studtable_t* table, const keytable_t* kt);
+
+void stable_sort(studtable_t* table, sort_t sort_fn);
+
 
 #endif // _AUTOTABLE_H_

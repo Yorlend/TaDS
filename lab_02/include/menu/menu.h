@@ -1,5 +1,5 @@
-#ifndef _MENU_H_
-#define _MENU_H_
+#ifndef __MENU_H__
+#define __MENU_H__
 
 #include <stdio.h>
 #include "option.h"
@@ -19,4 +19,4 @@ int menu_run(menu_t* menu);
 int menu_runf(FILE* input, menu_t* menu);
 
 
-#endif // _MENU_H_
+#endif /* __MENU_H__ */

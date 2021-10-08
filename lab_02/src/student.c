@@ -63,7 +63,7 @@ static bool read_gender(gender_t* gender, const char* str)
     return true;
 }
 
-static bool read_uint(uint8_t* num, const char* str)
+static bool read_uint(uint16_t* num, const char* str)
 {
     if (str == NULL)
         return false;
@@ -249,7 +249,7 @@ static status_t input_str(const char* prompt, char* dst, size_t dst_size)
     if (getline(&buf, &size, stdin) >= 0)
     {
         *strchr(buf, '\n') = '\0';
-        if (strlen(buf) < dst_size)
+        if (strlen(buf) < dst_size && strlen(buf) > 0)
         {
             strcpy(dst, buf);
             status = SUCCESS;
@@ -354,10 +354,10 @@ static status_t input_address(student_t* stud)
         status = input_str("Input street: ", stud->housing.appartment.street, MAX_STR);
 
         if (status == SUCCESS)
-            status = input_uint("Input house number [1..89]: ", stud->housing.appartment.house);
+            status = input_uint("Input house number [1..89]: ", &stud->housing.appartment.house);
 
         if (status == SUCCESS)
-            status = input_uint("Input appartment number [1..999]: ", stud->housing.appartment.appt_num);
+            status = input_uint("Input appartment number [1..999]: ", &stud->housing.appartment.appt_num);
     }
 
     return status;
@@ -366,7 +366,6 @@ static status_t input_address(student_t* stud)
 status_t input_student(student_t* stud)
 {
     status_t status = SUCCESS;
-    char tmp[MAX_STR] = "";
 
     status = input_str("Input stundent's surname: ", stud->surname, MAX_STR);
 
