@@ -80,8 +80,16 @@ int sort_table_opt(void)
         timer_start();
         stable_sort(&table, sorts[type]);
         long dt = timer_end();
+        size_t memsize;
+
+        if (type == 1)
+            memsize = selection_mem(table.size, sizeof(table.data[0]));
+
+        if (type == 2)
+            memsize = merge_mem(table.size, sizeof(table.data[0]));
 
         printf("Table sorted! time: %ldus\n", dt);
+        printf("Memory used:%8s%zu byte(s)\n", "", memsize);
     }
 
     return SUCCESS;
@@ -117,8 +125,16 @@ int sort_keytable_opt(void)
         timer_start();
         keytable_sort(&keytable, sorts[type]);
         long dt = timer_end();
+        size_t memsize;
+
+        if (type == 1)
+            memsize = selection_mem(keytable.size, sizeof(keytable.data[0]));
+
+        if (type == 2)
+            memsize = merge_mem(keytable.size, sizeof(keytable.data[0]));
 
         printf("Keytable sorted! time: %ldus\n", dt);
+        printf("Memory used:%11s%zu byte(s)\n", "", memsize);
     }
 
     return SUCCESS;

@@ -79,3 +79,21 @@ void merge_sort(void* base, size_t nitems, size_t size, compare_t cmp)
     merge_sort((char*)base + mid * size, nitems - mid, size, cmp);
     merge(base, size, mid, nitems, cmp);
 }
+
+size_t selection_mem(size_t N, size_t size)
+{
+    return N * size;
+}
+
+size_t merge_mem(size_t N, size_t size)
+{
+    size_t m = 0;
+    while (N > 2)
+    {
+        m += N;
+        N = (N + 1) / 2;
+    }
+    m += N;
+
+    return m * size;
+}

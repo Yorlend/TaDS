@@ -1,5 +1,5 @@
-#ifndef _GENDER_H_
-#define _GENDER_H_
+#ifndef __GENDER_H__
+#define __GENDER_H__
 
 typedef enum
 {
@@ -11,4 +11,4 @@ typedef enum
 gender_t str_to_gender(const char* str);
 const char* gender_to_str(gender_t gender);
 
-#endif // _GENDER_H_
+#endif /* __GENDER_H__ */

@@ -1,5 +1,5 @@
-#ifndef _KEY_H_
-#define _KEY_H_
+#ifndef __KEY_H__
+#define __KEY_H__
 
 #include <stddef.h>
 #include "student.h"
@@ -13,4 +13,4 @@ typedef struct key
 
 _key_t stud_to_key(const student_t* stud, size_t id);
 
-#endif // _KEY_H_
+#endif /* __KEY_H__ */

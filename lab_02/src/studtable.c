@@ -81,6 +81,9 @@ status_t stable_loadf(studtable_t* table, FILE* file)
 
     status_t status = SUCCESS;
 
+    if (size < 1)
+        status = FILE_ERROR;
+
     for (unsigned int i = 0; i < size && status == SUCCESS; i++)
         status = read_student_f(temp.data + i, file);
 

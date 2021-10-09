@@ -1,5 +1,5 @@
-#ifndef _HOUSE_H_
-#define _HOUSE_H_
+#ifndef __HOUSE_H__
+#define __HOUSE_H__
 
 
 typedef enum
@@ -12,4 +12,4 @@ typedef enum
 housing_t str_to_housing(const char* str);
 const char* housing_to_str(housing_t housing);
 
-#endif // _HOUSE_H_
+#endif /* __HOUSE_H__ */
