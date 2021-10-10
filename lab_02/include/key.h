@@ -11,6 +11,7 @@ typedef struct key
     double avg;
 } _key_t;
 
+// Возвращает ключ структуры студента
 _key_t stud_to_key(const student_t* stud, size_t id);
 
 #endif /* __KEY_H__ */

@@ -4,13 +4,13 @@
 
 typedef enum
 {
-    SUCCESS,
-    FILE_ERROR,
-    TABLE_ERROR,
-    INPUT_ERROR,
-    MEMORY_ERROR,
-    STUD_ERROR,
-    FUNC_ARGS_ERROR,
+    SUCCESS,            // Успешное завершение работы
+    FILE_ERROR,         // Ошибка чтения файла
+    TABLE_ERROR,        // Ошибка работы с таблицей
+    INPUT_ERROR,        // Ошибка ввода
+    MEMORY_ERROR,       // Ошибка памяти
+    STUD_ERROR,         // Ошибка: некорректный студент
+    FUNC_ARGS_ERROR,    // Ошибка аргументов функции
 } status_t;
 
 #endif // _STATUS_H_

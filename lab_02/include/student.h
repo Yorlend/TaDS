@@ -32,12 +32,16 @@ typedef struct
     } housing;
 } student_t;
 
+// Проверка структуры на валидность
 bool stud_valid(const student_t* stud);
 
-// void stud_write_row(const student_t* stud);
+// Чтение структуры по строке
 status_t read_student(student_t* stud, const char* str);
+
+// Чтение структуры из файла
 status_t read_student_f(student_t* stud, FILE* file);
 
+// Ввод структуры с клавиатуры
 status_t input_student(student_t* stud);
 
 #endif // _STUDENT_H_

@@ -3,15 +3,15 @@ from itertools import product
 from random import choice, randint, random
 
 
-genders = {0: "M", 1: "F"}
+genders = {0: "m", 1: "f"}
 
 surnames_m = "Ivanov Petrov Sidorov Maksimov Vitus Gofrik Cherno".split()
 surnames_f = "Ivanova Petrova Sidorova Maksimova Serova Shelia".split()
-surnames = {"M": surnames_m, "F": surnames_f}
+surnames = {"m": surnames_m, "f": surnames_f}
 
 names_m = "Ivan Petya Sidor Maksim Vitya Vlad".split()
 names_f = "Masha Sonya Tanya Eva Nadya".split()
-names = {"M": names_m, "F": names_f}
+names = {"m": names_m, "f": names_f}
 
 groups = [f"IU7-{i}{j}B" for i, j in product(range(1, 9), range(1, 7))]
 
@@ -19,7 +19,7 @@ streets = "Ladozhskaya Parkovaya Olenevskaya Kostritskaya Krasnaya Izmaylovskaya
 
 
 def gen_entry(file):
-    gender = choice(["F", "M"])
+    gender = choice(["f", "m"])
     surname = choice(surnames[gender])
     name = choice(names[gender])
     age = randint(18, 25)

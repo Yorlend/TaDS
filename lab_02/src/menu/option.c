@@ -25,5 +25,5 @@ int option_index(option_t* opt)
 
 option_t* opt_exit()
 {
-    return option_create("exit", NULL);
+    return option_create("выход", NULL);
 }

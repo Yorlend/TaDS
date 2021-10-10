@@ -10,6 +10,7 @@ menu_t menu_create(const char* text)
     menu_t menu;
     menu.text = text;
     menu.option = opt_exit();
+    menu.error_handler = NULL;
 
     return menu;
 }
@@ -32,6 +33,15 @@ int menu_add_option(menu_t* menu, option_t* option)
     option->next = menu->option;
     menu->option = option;
 
+    return 0;
+}
+
+int menu_add_error_handler(menu_t* menu, opt_func_t func)
+{
+    if (menu == NULL || func == NULL)
+        return 1;
+    
+    menu->error_handler = func;
     return 0;
 }
 
@@ -63,6 +73,9 @@ static int _str_to_uint(const char* str, int* res)
     while (isspace(*str))
         str++;
 
+    if (str == NULL || res == NULL || *str == '\0')
+        return 1;
+
     for (*res = 0; isdigit(*str); str++)
         *res = 10 * *res + (*str - '0');
     
@@ -87,14 +100,15 @@ int menu_runf(FILE* input, menu_t* menu)
         _menu_print(menu);
 
         status = _menu_prompt(input, input_line, MAX_INPUT_LINE_SIZE);
-        if (status != 0)
-            return status;
-        
-        status = _str_to_uint(input_line, &opt_index);
-        if (status != 0)
-            return status;
-        else if (opt_index > option_index(menu->option))
-            return 3;
+        if (status == 0)
+            status = _str_to_uint(input_line, &opt_index);
+    
+        if (status != 0 || opt_index > option_index(menu->option))
+        {
+            if (menu->error_handler != NULL)
+                menu->error_handler();
+            continue;
+        }
         else if (opt_index == 0)
             return 0;
         

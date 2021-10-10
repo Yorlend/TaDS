@@ -24,6 +24,11 @@ static bool parse(const char** str, char sym)
     return true;
 }
 
+bool is_leap_year(uint16_t year)
+{
+    return year % 400 == 0 || (year % 100 != 0 && year % 4 == 0);
+}
+
 void reset_date(date_t* date)
 {
     date->day = 0;
@@ -41,6 +46,21 @@ bool date_valid(const date_t* date)
     
     if (date->year < 1896 || 2021 < date->year)
         return false;
+
+    if (date->month == 2)
+    {
+        if (is_leap_year(date->year))
+        {
+            if (date->day > 29)
+                return false;
+        }
+        else if (date->day > 28)
+            return false;
+    }
+
+    if ((date->month - 1 + (date->month > 6)) % 2 == 1)
+        if (date->day > 30)
+            return false;
 
     return true; 
 }

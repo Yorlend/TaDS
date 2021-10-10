@@ -18,16 +18,16 @@ int print_table_opt(void)
 int remove_stud_opt(void)
 {
     size_t id;
-    printf("Enter student id: ");
+    printf("Введите id студента: ");
     char dummy;
 
     if (scanf("%lu%c", &id, &dummy) != 2)
-        printf("Bad student id.\n");
+        printf("Введите корректный id!\n");
     else if (stable_remove(&table, id) != SUCCESS)
-        printf("Could not remove student.\n");
+        printf("Невозможно удалить студента. Введите корректный id\n");
     else
     {
-        printf("Successfuly removed student.\n");
+        printf("Студент успешно удален из таблицы\n");
         update_keytable(&keytable, &table);
     }
 
@@ -52,10 +52,10 @@ int cond_print_opt(void)
     uint16_t year;
     char dummy;
 
-    printf("Enter students' enroll year: ");
+    printf("Введите дату поступления ");
 
     if (scanf("%hu%c", &year, &dummy) != 2)
-        printf("Bad enroll year.\n");
+        printf("Некорректная дата. Введите корректную дату в следующем формате: ДД.ММ.ГГГГ\n");
     else
         stable_cond_print(&table, year);
 
@@ -67,12 +67,12 @@ int sort_table_opt(void)
     uint16_t type;
     char dummy;
 
-    printf(" 1. selection sort\n");
-    printf(" 2. merge sort\n");
-    printf("Enter sort type: ");
+    printf(" 1. Сортировка выбором\n");
+    printf(" 2. Сортировка слиянием\n");
+    printf("Выберите алгоритм сортировки: ");
 
     if (scanf("%hu%c", &type, &dummy) != 2 || type == 0 || type > 2)
-        printf("Bad sort type.\n");
+        printf("Неверно указан алгоритм сортировки.\n");
     else
     {
         sort_t sorts[] = {[1] = selection_sort, [2] = merge_sort};
@@ -88,8 +88,8 @@ int sort_table_opt(void)
         if (type == 2)
             memsize = merge_mem(table.size, sizeof(table.data[0]));
 
-        printf("Table sorted! time: %ldus\n", dt);
-        printf("Memory used:%8s%zu byte(s)\n", "", memsize);
+        printf("Таблица отсортирована!\nЗатраченное Время:  %ldus\n", dt);
+        printf("Затраченная Память: %zu байт\n", memsize);
     }
 
     return SUCCESS;
@@ -112,12 +112,12 @@ int sort_keytable_opt(void)
     uint16_t type;
     char dummy;
 
-    printf(" 1. selection sort\n");
-    printf(" 2. merge sort\n");
-    printf("Enter sort type: ");
+    printf(" 1. Сортировка выбором\n");
+    printf(" 2. Сортировка слиянием\n");
+    printf("Выберите алгоритм сортировки: ");
 
     if (scanf("%hu%c", &type, &dummy) != 2 || type == 0 || type > 2)
-        printf("Bad sort type.\n");
+        printf("Неверно указан алгоритм сортировки.\n");
     else
     {
         sort_t sorts[] = {[1] = selection_sort, [2] = merge_sort};
@@ -125,16 +125,16 @@ int sort_keytable_opt(void)
         timer_start();
         keytable_sort(&keytable, sorts[type]);
         long dt = timer_end();
-        size_t memsize;
+        size_t memsize = sizeof(table) + sizeof(student_t) * table.size;
 
         if (type == 1)
-            memsize = selection_mem(keytable.size, sizeof(keytable.data[0]));
+            memsize += selection_mem(keytable.size, sizeof(keytable.data[0]));
 
         if (type == 2)
-            memsize = merge_mem(keytable.size, sizeof(keytable.data[0]));
+            memsize += merge_mem(keytable.size, sizeof(keytable.data[0]));
 
-        printf("Keytable sorted! time: %ldus\n", dt);
-        printf("Memory used:%11s%zu byte(s)\n", "", memsize);
+        printf("Таблица ключей отсортирована!\nЗатраченное Время:  %ldus\n", dt);
+        printf("Затраченная Память: %zu байт\n", memsize);
     }
 
     return SUCCESS;
@@ -143,6 +143,12 @@ int sort_keytable_opt(void)
 int print_table_key_opt(void)
 {
     stable_print_key(&table, &keytable);
+    return SUCCESS;
+}
+
+int error_handler(void)
+{
+    printf("Введите корректное значение пункта меню.\n");
     return SUCCESS;
 }
 
@@ -161,19 +167,20 @@ int main(int argc, const char* argv[])
     }
 
     if (status != SUCCESS)
-        printf("could not load data file\n");
+        printf("не удалось загрузить данные.\n");
     else
     {
-        menu_t menu = menu_create("=== [MENU] ===");
-        menu_add_option(&menu, option_create("sort table", sort_table_opt));
-        menu_add_option(&menu, option_create("sort keytable", sort_keytable_opt));
-        menu_add_option(&menu, option_create("remove student", remove_stud_opt));
-        menu_add_option(&menu, option_create("add student", add_stud_opt));
-        menu_add_option(&menu, option_create("search students", cond_print_opt));
-        menu_add_option(&menu, option_create("print table", print_table_opt));
-        menu_add_option(&menu, option_create("print keytable", print_keytable_opt));
-        menu_add_option(&menu, option_create("print table by keytable", print_table_key_opt));
-        menu_add_option(&menu, option_create("show sorting algorithms time complexity graph", graph_opt));
+        menu_t menu = menu_create("======== [Меню] ========");
+        menu_add_error_handler(&menu, error_handler);
+        menu_add_option(&menu, option_create("сортировать таблицу", sort_table_opt));
+        menu_add_option(&menu, option_create("сортировать таблицу ключей", sort_keytable_opt));
+        menu_add_option(&menu, option_create("удалить студента", remove_stud_opt));
+        menu_add_option(&menu, option_create("добавить студента", add_stud_opt));
+        menu_add_option(&menu, option_create("поиск студентов", cond_print_opt));
+        menu_add_option(&menu, option_create("вывод таблицы студентов", print_table_opt));
+        menu_add_option(&menu, option_create("вывод таблицы ключей", print_keytable_opt));
+        menu_add_option(&menu, option_create("вывод таблицы студентов по таблице ключей", print_table_key_opt));
+        menu_add_option(&menu, option_create("вывести график сравнения сортировок", graph_opt));
 
         status = menu_run(&menu);
 

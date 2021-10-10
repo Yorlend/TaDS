@@ -72,10 +72,6 @@ status_t stable_loadf(studtable_t* table, FILE* file)
     if (table == NULL)
         return TABLE_ERROR;
 
-    char* line = NULL;
-    size_t len = 0;
-    (void) line;
-
     unsigned int size = _count_file_lines(file);
     studtable_t temp = stable_reserve(size);
 

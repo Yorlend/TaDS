@@ -125,20 +125,6 @@ static bool read_address(student_t* stud, const char* str)
     return true;
 }
 
-// void stud_write_row(const student_t* stud)
-// {
-//     printf("|%10s|%10s|%s|%s|%u|%.2lf|%s|%10s|",
-//         stud->surname, stud->name, stud->group,
-//         gender_to_str(stud->gender), stud->age,
-//         stud->avg_score, date_to_str(&stud->enroll_date),
-//         housing_to_str(stud->house));
-    
-//     if (stud->house == DORM)
-//     {
-//         printf("||\n");
-//     }
-// }
-
 /**
  * Ожидаемый формат ввода:
  * <Фамилия>;<Имя>;<Группа>;<Пол>;<Возраст>;<Средний балл>;<Дата поступления>;<Где проживает>;[...];
@@ -343,21 +329,21 @@ static status_t input_address(student_t* stud)
 
     if (stud->house == DORM)
     {
-        status = input_uint("Input dorm number [1..10]: ", &stud->housing.dorm.number);
+        status = input_uint("Введите номер общежития [1..10]: ", &stud->housing.dorm.number);
 
         if (status == SUCCESS)
-            status = input_uint("Input room number [1..899]: ", &stud->housing.dorm.room);
+            status = input_uint("Введите номер комнаты [1..899]: ", &stud->housing.dorm.room);
     }
 
     if (stud->house == APPARTMENT)
     {
-        status = input_str("Input street: ", stud->housing.appartment.street, MAX_STR);
+        status = input_str("Введите улицу: ", stud->housing.appartment.street, MAX_STR);
 
         if (status == SUCCESS)
-            status = input_uint("Input house number [1..89]: ", &stud->housing.appartment.house);
+            status = input_uint("Введите номер дома [1..89]: ", &stud->housing.appartment.house);
 
         if (status == SUCCESS)
-            status = input_uint("Input appartment number [1..999]: ", &stud->housing.appartment.appt_num);
+            status = input_uint("Введите квартиру [1..999]: ", &stud->housing.appartment.appt_num);
     }
 
     return status;
@@ -367,66 +353,66 @@ status_t input_student(student_t* stud)
 {
     status_t status = SUCCESS;
 
-    status = input_str("Input stundent's surname: ", stud->surname, MAX_STR);
+    status = input_str("Введите фамилию студента: ", stud->surname, MAX_STR);
 
     if (status != SUCCESS)
     {
-        printf("Surname is not correct, check input data\n");
+        printf("Фамилия некорректна.\n");
         return status;
     }
 
-    status = input_str("Input name: ", stud->name, MAX_STR);
+    status = input_str("Введите имя: ", stud->name, MAX_STR);
 
     if (status != SUCCESS)
     {
-        printf("Name is not correct, check input data\n");
+        printf("Имя некорректно.\n");
         return status;
     }
 
-    status = input_str("Input group: ", stud->group, MAX_STR);
+    status = input_str("Введите группу: ", stud->group, MAX_STR);
 
     if (status != SUCCESS)
     {
-        printf("Group is not correct, check input data\n");
+        printf("Группа некорректна.\n");
         return status;
     }
 
-    status = input_gender("Input gender (M/F; MALE/FEMALE): ", &stud->gender);
+    status = input_gender("Введите пол (m/f): ", &stud->gender);
 
     if (status != SUCCESS)
     {
-        printf("Gender is not correct, check input data\n");
+        printf("Пол некорректен.\n");
         return status;
     }
 
-    status = input_uint("Input age: ", &stud->age);
+    status = input_uint("Введите возраст: ", &stud->age);
 
     if (status != SUCCESS || stud->age < 7 || stud->age > 122)
     {
-        printf("Age is not correct, check input data\n");
+        printf("Возраст некорректен. возраст - [7..122]\n");
         return INPUT_ERROR;
     }
-    status = input_double("Input average score: ", &stud->avg_score);
+    status = input_double("Введите средний балл: ", &stud->avg_score);
 
     if (status != SUCCESS)
     {
-        printf("Average score is not correct, check input data\n");
+        printf("Средний балл некорректен. [2..5]\n");
         return status;
     }
 
-    status = input_date("Input enroll date (DD.MM.YYYY): ", &stud->enroll_date);
+    status = input_date("Введите дату поступления (ДД.ММ.ГГГГ): ", &stud->enroll_date);
 
     if (status != SUCCESS)
     {
-        printf("Date is not correct, check input data\n");
+        printf("Дата некорректна.\n");
         return status;
     }
 
-    status = input_house("Input house type (dorm/appartment): ", &stud->house);
+    status = input_house("Введите тип жилья (dorm/appartment): ", &stud->house);
 
     if (status != SUCCESS)
     {
-        printf("House type is not correct, check input data\n");
+        printf("Тип жилья некорректен.\n");
         return status;
     }
 
@@ -434,7 +420,7 @@ status_t input_student(student_t* stud)
 
     if (status != SUCCESS)
     {
-        printf("House info is not correct, check input data\n");
+        printf("Информация о месте проживания некорректна.\n");
         return status;
     }
 

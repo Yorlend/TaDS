@@ -118,7 +118,9 @@ typedef enum
 
 \chapter{Технологический раздел}
 
-\section{Требование к ПО}
+К разрабатываемому программному обеспечению предъявляются следующие требования:
+
+\section{Требования к ПО}
 
 \paragraph{Требования ко вводу: }
 
@@ -148,6 +150,62 @@ typedef enum
 	\item Некорректный ввод данных.
 	\item Пустой файл.
 \end{itemize}
+
+\section{Набор основных функций}
+
+Ниже представлены листинги основных функций для работы с таблицей (Листинг \ref{tabl_func}) и для работы со структурой студента (Листинг \ref{stud_func})
+
+\begin{lstlisting}[label=tabl_func,language=C,caption=Набор функций для работы с таблицей]
+// Функция возвращает пустую таблицу
+studtable_t stable_empty();
+
+// Функция резервирует память под таблицу
+studtable_t stable_reserve(unsigned int size);
+
+// Функция освобождает ресурсы
+void stable_destroy(studtable_t* table);
+
+// Функция проверки таблицы на валидность
+bool stable_valid(const studtable_t* table);
+
+// Функция загрузки таблицы по имени файла
+status_t stable_load(studtable_t* table, const char* filename);
+
+// Функция загрузки таблицы по файловому указателю
+status_t stable_loadf(studtable_t* table, FILE* file);
+
+// Функция добавления студента
+status_t stable_push_back(studtable_t* table, const student_t* stud);
+
+// Функция удаления студента
+status_t stable_remove(studtable_t* table, size_t id);
+
+// Функция вывода таблицы студентов
+void stable_print(const studtable_t* table);
+
+// Функция вывода студентов указанного года поступления, живущих в общежитии
+void stable_cond_print(studtable_t* table, uint16_t year);
+
+// Функция вывода студентов по таблице ключей
+void stable_print_key(const studtable_t* table, const keytable_t* kt);
+
+// Функция сортировки таблицы
+void stable_sort(studtable_t* table, sort_t sort_fn);
+\end{lstlisting}
+
+\begin{lstlisting}[label=stud_func,language=C,caption=Набор функций для работы со структурой студента]
+// Проверка структуры на валидность
+bool stud_valid(const student_t* stud);
+
+// Чтение структуры по строке
+status_t read_student(student_t* stud, const char* str);
+
+// Чтение структуры из файла
+status_t read_student_f(student_t* stud, FILE* file);
+
+// Ввод структуры с клавиатуры
+status_t input_student(student_t* stud);
+\end{lstlisting}
 
 \section{Реализация алгоритмов}
 
@@ -241,10 +299,6 @@ void merge_sort(void* base, size_t nitems, size_t size, compare_t cmp)
 }
 \end{lstlisting}
 
-\section{Вывод}
-
-В данном разделе были разработаны исходные коды алгоритмов сортировки: выбором и слиянием.
-
 \pagebreak
 
 \section{Тестовые данные}
@@ -304,10 +358,45 @@ void merge_sort(void* base, size_t nitems, size_t size, compare_t cmp)
 
 Время выполнения алгоритмов замерялось при помощи функции \textit{clock()} из библиотеки \textit{time.h}
 
+\begin{table}
+	\caption{Сравнение быстродействия алгоритмов сортировки с ключом и без ключа}
+	\begin{center}
+		\begin{tabular}{|c|c|c|c|c|}
+			\hline
+			N & Выбором, мкс & Слиянием, мкс & Выбором/ключ, мкс & Слияние/ключ, мкс \\
+			\hline
+			100 & 1800 & 479 & 84 & 31 \\
+			200 & 3822 & 401 & 189 & 67 \\
+			300 & 2758 & 1569 & 846 & 102 \\
+			400 & 7009 & 1916 & 920 & 133 \\
+			500 & 8481 & 2820 & 1395 & 175 \\
+			600 & 10269 & 1928 & 2072 & 214 \\
+			700 & 11297 & 3162 & 3524 & 265 \\
+			800 & 13791 & 2038 & 4583 & 358 \\
+			900 & 15396 & 2365 & 5608 & 237 \\
+			1000 & 14242 & 5560 & 5273 & 379 \\
+			1100 & 16930 & 3199 & 4442 & 587 \\
+			1200 & 21750 & 5216 & 5936 & 486 \\
+			1300 & 20576 & 5029 & 6992 & 645 \\
+			1400 & 22221 & 5574 & 10749 & 392 \\
+			1500 & 22694 & 5946 & 10927 & 617 \\
+			1600 & 31442 & 6474 & 12145 & 677 \\
+			1700 & 26806 & 7070 & 13073 & 905 \\
+			1800 & 27186 & 7949 & 14929 & 507 \\
+			1900 & 34171 & 6021 & 16445 & 573 \\
+			\hline
+		\end{tabular}
+	\end{center}
+\end{table}
+
+\pagebreak
+
 \begin{figure}
 	\includegraphics[width=\linewidth]{img/sort_time.png}
 	\caption{График зависимости времени выполнения сортировки от размерности сортируемой таблицы}
 \end{figure}
+
+%\pagebreak
 
 \section{Относительная эффективность по времени}
 

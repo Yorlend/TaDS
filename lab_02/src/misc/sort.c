@@ -2,6 +2,7 @@
 #include <string.h>
 
 
+// Обменивает значение двух элементов
 static void swap(void* a, void* b, size_t size)
 {
     for (size_t i = 0; i < size; i++)
@@ -12,6 +13,7 @@ static void swap(void* a, void* b, size_t size)
     }
 }
 
+// Находит индекс минимального элемента массива
 static size_t min_index(const void* base, size_t nitems, size_t size, compare_t cmp)
 {
     size_t res = 0;
@@ -40,6 +42,8 @@ void selection_sort(void* base, size_t nitems, size_t size, compare_t cmp)
     }
 }
 
+
+// Сливает два отсортированных массива воедино, сохраняя упорядоченность
 static void merge(void* base, size_t size, size_t mid, size_t right, compare_t cmp) 
 {
     char tmp[size * mid];

@@ -14,13 +14,19 @@ typedef struct keytable
 } keytable_t;
 
 
+// Инициализирует таблицу ключей нулевыми значениями
 status_t init_keytable(keytable_t* kt);
 
+// Обновляет таблицу ключей в соответствии с таблицей студентов
 status_t update_keytable(keytable_t* kt, const studtable_t* st);
+
+// Выводит таблицу ключей
 void print_keytable(const keytable_t* kt);
 
+// Сортирует таблицу ключей
 void keytable_sort(keytable_t* kt, sort_t sort_fn);
 
+// Освобождает память
 void keytable_destroy(keytable_t* kt);
 
 #endif /* __KEYTABLE_H__ */

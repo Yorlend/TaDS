@@ -8,10 +8,10 @@ gender_t str_to_gender(const char* str)
 
     if (str != NULL)
     {
-        if (!strcmp(str, "M"))
+        if (!strcmp(str, "m"))
             gender = MALE;
 
-        if (!strcmp(str, "F"))
+        if (!strcmp(str, "f"))
             gender = FEMALE;
     }
 
