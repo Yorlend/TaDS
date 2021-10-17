@@ -1,36 +1,28 @@
-#include <stdio.h>
 #include "misc/errors.h"
-#include "convert_mat.h"
-#include "operations.h"
-#include "mat_io.h"
+#include "process.h"
 
 int main(int argc, const char **argv)
 {
-    int status = SUCCESS;
+    if (argc == 2)
+        return do_auto_tests(argv[1]);
 
-    stdmat_t mat = stdm_zero(50, 70);
-    stdm_randomize(&mat, 90);
+    id_t rows = 0, cols = 0;
+    stdmat_t mat = stdm_null();
+    stdmat_t vec = stdm_null();
 
-    stdmat_t vec = stdm_zero(1, 50);
-    stdm_randomize(&vec, 50);
+    int status = input_mat_dims(&rows, &cols);
 
-    stdmat_t res = stdm_null();
+    if (status == SUCCESS)
+        status = input_vec(&vec, rows);
 
-    double time_std;
-    double time_spa;
-    bool correct;
-    if (test_mul(&correct, &time_std, &time_spa, &res, &vec, &mat) != SUCCESS)
-        printf("test not success.\n");
-    else
-    {
-        printf("correct: %d\n", correct);
-        printf("time std: %lf\n", time_std);
-        printf("time spa: %lf\n", time_spa);
-    }
+    if (status == SUCCESS)
+        status = input_mat(&mat, rows, cols);
 
-    FILE* file = fopen("data.csv", "w");
-    run_tests(file, 10, 10, 100, 10, 200);
-    fclose(file);
+    if (status == SUCCESS)
+        status = test_matrices(&vec, &mat);
+
+    stdm_destroy(&mat);
+    stdm_destroy(&vec);
 
     return status;
 }

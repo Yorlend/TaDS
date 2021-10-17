@@ -16,7 +16,7 @@ smatrix_t smat_null(void)
     return mat;
 }
 
-bool smat_is_valid(const smatrix_t* mat)
+bool smat_is_valid(const smatrix_t *mat)
 {
     if (mat == NULL)
         return false;
@@ -25,7 +25,7 @@ bool smat_is_valid(const smatrix_t* mat)
     return dims_valid && mat->A != NULL && mat->JA != NULL;
 }
 
-void smat_destroy(smatrix_t* mat)
+void smat_destroy(smatrix_t *mat)
 {
     if (mat != NULL)
     {
@@ -38,7 +38,7 @@ void smat_destroy(smatrix_t* mat)
     }
 }
 
-data_t smat_get(const smatrix_t* mat, id_t row, id_t col)
+data_t smat_get(const smatrix_t *mat, id_t row, id_t col)
 {
     if (smat_is_valid(mat) && row < mat->rows && col < mat->cols)
     {
@@ -51,4 +51,9 @@ data_t smat_get(const smatrix_t* mat, id_t row, id_t col)
     }
 
     return 0;
+}
+
+size_t smat_calc_mem(const smatrix_t *mat)
+{
+    return sizeof(smatrix_t) + mat->size * (sizeof(data_t) + sizeof(id_t)) + (mat->rows + 1) * sizeof(id_t);
 }

@@ -2,6 +2,7 @@
 #define __STDMAT_H__
 
 #include <stdbool.h>
+#include <stddef.h>
 #include "misc/types.h"
 
 typedef struct stdmat
@@ -29,6 +30,6 @@ bool stdm_is_multable(const stdmat_t* left, const stdmat_t *right);
 // Случайная матрица
 int stdm_randomize(stdmat_t* mat, double zero_percent);
 
-// int stdm_input(stdmat_t* mat)
+size_t stdm_calc_mem(const stdmat_t *mat);
 
 #endif /* __STDMAT_H__ */
