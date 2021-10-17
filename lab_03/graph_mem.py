@@ -17,7 +17,7 @@ def mem_smat(N, p):
     smatSize = 3 * idSize + 2 * ptrSize + 0
     return smatSize + M * (dataSize + idSize) + (N + 1) * idSize
 
-N = 100
+N = 10
 MD = [mem_dmat(N, p) for p in P]
 MS = [mem_smat(N, p) for p in P]
 

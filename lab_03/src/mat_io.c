@@ -29,7 +29,13 @@ int print_stdmat(FILE* file, const stdmat_t *mat)
         return ARGS_ERR;
     
     if (!stdm_is_valid(mat))
+    {
         fprintf(file, "(null)\n");
+        return MEM_ERR;
+    }
+
+    if (mat->cols >20 || mat->rows > 20)
+        fprintf(file, "Матрица не будет выведена, так как размер превышает 20х20\n");
     else
     {
         for (id_t row = 0; row < mat->rows; row++)
@@ -49,7 +55,13 @@ int print_smat(FILE *file, const smatrix_t *mat)
         return ARGS_ERR;
     
     if (!smat_is_valid(mat))
+    {
         fprintf(file, "(null)\n");
+        return MEM_ERR;
+    }
+
+    if (mat->cols >20 || mat->rows > 20)
+        printf("Матрица не будет выведена, так как размер превышает 20х20\n");
     else
     {
         for (id_t row = 0; row < mat->rows; row++)

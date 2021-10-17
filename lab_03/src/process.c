@@ -1,6 +1,7 @@
 #include <stdio.h>
 #include "misc/errors.h"
 #include "operations.h"
+#include "convert_mat.h"
 #include "process.h"
 #include "mat_io.h"
 
@@ -37,6 +38,44 @@ int input_mat_dims(id_t *rows, id_t *cols)
     return SUCCESS;
 }
 
+static int _input_mode(int *mode)
+{
+    printf("выберите режим заполнения (0 - авто., 1 - ручной): ");
+
+    if (scanf("%d", mode) != 1)
+    {
+        printf("Некорректный ввод.\n");
+        return INP_ERR;
+    }
+
+    if (*mode != 0 && *mode != 1)
+    {
+        printf("Неверный формат ввода.\n");
+        return INP_ERR;
+    }
+
+    return SUCCESS;
+}
+
+static int _input_percent(double *percent, const char* prompt)
+{
+    printf("Введите процент разреженности %s (от 0 до 100): ", prompt);
+
+    if (scanf("%lf", percent) != 1)
+    {
+        printf("Некорректный ввод.\n");
+        return INP_ERR;
+    }
+
+    if (*percent < 0 || *percent > 100)
+    {
+        printf("Неверный процент разреженности.\n");
+        return INP_ERR;
+    }
+
+    return SUCCESS;
+}
+
 int input_vec(stdmat_t *vec, id_t cols)
 {
     *vec = stdm_zero(1, cols);
@@ -44,6 +83,26 @@ int input_vec(stdmat_t *vec, id_t cols)
     {
         printf("Возникла ошибка при выделении памяти.\n");
         return MEM_ERR;
+    }
+
+    int mode;
+    int status = _input_mode(&mode);
+    if (status != SUCCESS)
+        return status;
+
+    if (mode == 0)
+    {
+        double percent;
+        status = _input_percent(&percent, "вектор-строки");
+
+        if (status == SUCCESS)
+        {
+            stdm_randomize(vec, percent);
+            printf("Сгенерированная вектор-строка:\n");
+            print_stdmat(stdout, vec);
+        }
+
+        return status;
     }
 
     printf("Ввод элементов вектор-строки.\n");
@@ -84,6 +143,26 @@ int input_mat(stdmat_t *mat, id_t rows, id_t cols)
         return MEM_ERR;
     }
 
+    int mode;
+    int status = _input_mode(&mode);
+    if (status != SUCCESS)
+        return status;
+
+    if (mode == 0)
+    {
+        double percent;
+        status = _input_percent(&percent, "матрицы");
+
+        if (status == SUCCESS)
+        {
+            stdm_randomize(mat, percent);
+            printf("Сгенерированная матрица:\n");
+            print_stdmat(stdout, mat);
+        }
+
+        return status;
+    }
+
     printf("Ввод элементов матрицы.\n");
 
     printf("Вводите тройки чисел (<№ строки> <№ столбца> <элемент>).\n");
@@ -117,6 +196,7 @@ int input_mat(stdmat_t *mat, id_t rows, id_t cols)
 static size_t _smat_calc_mem(const stdmat_t *mat)
 {
     smatrix_t smat = smat_null();
+    stdm_to_smat(&smat, mat);
     size_t size = smat_calc_mem(&smat);
     smat_destroy(&smat);
     return size;

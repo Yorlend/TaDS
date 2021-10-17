@@ -79,7 +79,7 @@ size_t lst_calc_mem(const list_t *lst)
 {
     size_t size = sizeof(list_t);
 
-    for (node_t *node = lst.head; node != NULL; node = node->next)
+    for (node_t *node = lst->head; node != NULL; node = node->next)
         size += sizeof(node_t);
 
     return size;
