@@ -4,7 +4,7 @@ CFLAGS := -std=gnu99 -Wall -pedantic -Iinclude
 SRCS := $(shell find src -name "*.c")
 OBJS := $(SRCS:src/%.c=out/%.o)
 
-.PHONY: clean data sort_res.csv
+.PHONY: clean data
 
 all: app.exe
 	./app.exe

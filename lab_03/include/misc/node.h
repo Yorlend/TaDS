@@ -1,13 +1,12 @@
 #ifndef __NODE_H__
 #define __NODE_H__
 
-typedef struct node_t node_t;
+#include "misc/types.h"
 
-struct node_t
+typedef struct node
 {
-    unsigned int col_index;     // индекс столбца
-    node_t* next;               // следующий элемент
-};
-
+    id_t col_index;    // индекс столбца
+    struct node* next; // следующий элемент
+} node_t;
 
 #endif /* __NODE_H__ */
