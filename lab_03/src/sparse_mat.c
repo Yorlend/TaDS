@@ -55,5 +55,5 @@ data_t smat_get(const smatrix_t *mat, id_t row, id_t col)
 
 size_t smat_calc_mem(const smatrix_t *mat)
 {
-    return sizeof(smatrix_t) + mat->size * (sizeof(data_t) + sizeof(id_t)) + (mat->rows + 1) * sizeof(id_t);
+    return sizeof(smatrix_t) - sizeof(list_t) + mat->size * (sizeof(data_t) + sizeof(id_t)) + lst_calc_mem(&mat->IA);
 }
