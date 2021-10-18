@@ -131,6 +131,12 @@ int input_vec(stdmat_t *vec, id_t cols)
         }
     }
 
+    if (vec->cols < 20)
+    {
+        printf("Введенная вектор-строка: \n");
+        print_stdmat(stdout, vec);
+    }
+
     return SUCCESS;
 }
 
@@ -190,6 +196,12 @@ int input_mat(stdmat_t *mat, id_t rows, id_t cols)
         }
     }
 
+    if (mat->rows < 20 || mat->cols < 20)
+    {
+        printf("Введенная матрица: \n");
+        print_stdmat(stdout, mat);
+    }
+
     return SUCCESS;
 }
 
@@ -207,6 +219,23 @@ int test_matrices(const stdmat_t *vec, const stdmat_t *mat)
     double time_std, time_spa;
     stdmat_t res = stdm_null();
 
+    if (vec->cols < 20)
+    {
+        printf("Вектор-строка в разреженном виде: \n");
+        smatrix_t sv = smat_null();
+        stdm_to_smat(&sv, vec);
+        print_smat_info(stdout, &sv);
+        smat_destroy(&sv);
+    }
+
+
+    printf("Матрица в разреженном виде: \n");
+    smatrix_t sm = smat_null();
+    stdm_to_smat(&sm, mat);
+    print_smat_info(stdout, &sm);
+    smat_destroy(&sm);
+
+
     printf("Производим умножение...\n");
 
     int status = test_mul(NULL, &time_std, &time_spa, &res, vec, mat);
@@ -214,12 +243,21 @@ int test_matrices(const stdmat_t *vec, const stdmat_t *mat)
     printf("Результат умножения:\n\n");
     print_stdmat(stdout, &res);
 
+    if (res.cols < 20)
+    {
+        printf("Результат в разреженном виде: \n");
+        smatrix_t sr = smat_null();
+        stdm_to_smat(&sr, &res);
+        print_smat_info(stdout, &sr);
+        smat_destroy(&sr);
+    }
+
     printf("\nВремя обычного умножения:     %.0lf нс\n", time_std);
     printf("Время специального умножения: %.0lf нс\n", time_spa);
 
     printf("\nЗатраченная память под хранение:\n");
-    printf("В плотном представлении: %zu байт\n", stdm_calc_mem(vec) + stdm_calc_mem(vec));
-    printf("В разреженном виде:      %zu байт\n", _smat_calc_mem(vec) + _smat_calc_mem(vec));
+    printf("В плотном представлении: %zu байт\n", stdm_calc_mem(vec) + stdm_calc_mem(mat));
+    printf("В разреженном виде:      %zu байт\n", _smat_calc_mem(vec) + _smat_calc_mem(mat));
 
     stdm_destroy(&res);
 
@@ -231,7 +269,7 @@ int do_auto_tests(const char* filename)
     FILE* file = fopen(filename, "w");
     if (file != NULL)
     {
-        run_tests(file, 50, 50, 500, 10, 50);
+        run_tests(file, 50, 50, 500, 10, 10);
         fclose(file);
         return SUCCESS;
     }

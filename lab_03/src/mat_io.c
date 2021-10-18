@@ -60,7 +60,7 @@ int print_smat(FILE *file, const smatrix_t *mat)
         return MEM_ERR;
     }
 
-    if (mat->cols >20 || mat->rows > 20)
+    if (mat->cols >20 && mat->rows > 20)
         printf("Матрица не будет выведена, так как размер превышает 20х20\n");
     else
     {

@@ -63,18 +63,32 @@ int stdm_randomize(stdmat_t *mat, double zero_percent)
     if (zero_percent < 0 || 100 < zero_percent)
         return BAD_PERCENT;
 
-    for (id_t row = 0; row < mat->rows; row++)
+    unsigned int non_zero = mat->cols * mat->rows  * (100 - zero_percent) / 100;
+
+    for (id_t i = 0; i < non_zero;)
     {
-        for (id_t col = 0; col < mat->cols; col++)
+        id_t row = rand() % mat->rows;
+        id_t col = rand() % mat->cols;
+
+        if (mat->data[row][col] == 0)
         {
-            if (rand() % 100 < zero_percent)
-                mat->data[row][col] = 0;
-            else
-                mat->data[row][col] = -100 + rand() % 200;
+            i++;
+            mat->data[row][col] = -100 + rand() % 200;
         }
     }
 
     return SUCCESS;
+
+    // for (id_t row = 0; row < mat->rows; row++)
+    // {
+    //     for (id_t col = 0; col < mat->cols; col++)
+    //     {
+    //         if (rand() % 100 < zero_percent)
+    //             mat->data[row][col] = 0;
+    //         else
+    //             mat->data[row][col] = -100 + rand() % 200;
+    //     }
+    // }
 }
 
 size_t stdm_calc_mem(const stdmat_t *mat)

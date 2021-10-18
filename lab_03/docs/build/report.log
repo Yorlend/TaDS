@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.9.10)  18 OCT 2021 01:12
+This is pdfTeX, Version 3.14159265-2.6-1.40.20 (TeX Live 2019/Debian) (preloaded format=pdflatex 2021.9.10)  18 OCT 2021 13:16
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -1509,22 +1509,22 @@ File: koi8-r.def 2014/10/28 v1.0d Input encoding file
 <img/graph20.jpg, id=458, 852.18375pt x 1149.29375pt>
 File: img/graph20.jpg Graphic file (type jpg)
 <use img/graph20.jpg>
-Package pdftex.def Info: img/graph20.jpg  used on input line 455.
+Package pdftex.def Info: img/graph20.jpg  used on input line 463.
 (pdftex.def)             Requested size: 512.14963pt x 690.73901pt.
 <img/graph80.jpg, id=459, 890.32625pt x 1165.35374pt>
 File: img/graph80.jpg Graphic file (type jpg)
 <use img/graph80.jpg>
-Package pdftex.def Info: img/graph80.jpg  used on input line 464.
+Package pdftex.def Info: img/graph80.jpg  used on input line 472.
 (pdftex.def)             Requested size: 512.14963pt x 670.35771pt.
 <img/mem.jpg, id=460, 1243.64626pt x 749.80125pt>
 File: img/mem.jpg Graphic file (type jpg)
 <use img/mem.jpg>
-Package pdftex.def Info: img/mem.jpg  used on input line 471.
+Package pdftex.def Info: img/mem.jpg  used on input line 479.
 (pdftex.def)             Requested size: 409.72125pt x 247.0233pt.
 <img/mem10.jpg, id=461, 1018.80624pt x 660.4675pt>
 File: img/mem10.jpg Graphic file (type jpg)
 <use img/mem10.jpg>
-Package pdftex.def Info: img/mem10.jpg  used on input line 478.
+Package pdftex.def Info: img/mem10.jpg  used on input line 486.
 (pdftex.def)             Requested size: 409.72125pt x 265.61337pt.
  [15 <./img/graph20.jpg>] [16 <./img/graph80.jpg>] [17 <./img/mem.jpg> <./img/m
 em10.jpg>]) (./conclusion.tex [18
@@ -1549,7 +1549,7 @@ Package atveryend Info: Empty hook `AtVeryVeryEnd' on input line 26.
 Here is how much of TeX's memory you used:
  39237 strings out of 482657
  830637 string characters out of 5957838
- 1450334 words of memory out of 5000000
+ 1450335 words of memory out of 5000000
  53157 multiletter control sequences out of 15000+600000
  559181 words of font info for 89 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
@@ -1564,7 +1564,7 @@ m/cmsy10.pfb></usr/share/texmf/fonts/type1/public/scalable-cyrfonts-tex/ftmb6w.
 pfb></usr/share/texmf/fonts/type1/public/scalable-cyrfonts-tex/ftmr6w.pfb></usr
 /share/texmf/fonts/type1/public/scalable-cyrfonts-tex/ftmri6w.pfb></usr/share/t
 exmf/fonts/type1/public/cm-super/sftt1000.pfb>
-Output written on build/report.pdf (19 pages, 1282133 bytes).
+Output written on build/report.pdf (19 pages, 1282385 bytes).
 PDF statistics:
  587 PDF objects out of 1000 (max. 8388607)
  525 compressed objects within 6 object streams
