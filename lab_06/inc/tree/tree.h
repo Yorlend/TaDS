@@ -59,7 +59,12 @@ const node_t *bst_search(const node_t *root, data_t key, size_t *cmp_count);
  */
 node_t *bst_remove(node_t *root, data_t key, size_t *cmp_count);
 
-double bst_mean_search_cmp_count(const node_t *root);
+double bst_get_mean_cmp_count(const node_t *root);
+
+/**
+ * @brief Вычисляет размер занимаемой деревом памяти
+ */
+size_t bst_sizeof(const node_t *root);
 
 /**
  * @brief Преобразование ДДП в АВЛ-дерево

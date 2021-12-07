@@ -173,14 +173,40 @@ node_t *bst_remove(node_t *root, data_t key, size_t *cmp_count)
     return root;
 }
 
-double bst_mean_search_cmp_count(const node_t *root)
+static void __bst_rec_cmp_count(const node_t *node, int *nodes_count, int *cmp_count, int depth)
+{
+    if (node == NULL)
+        return;
+    
+    (*nodes_count)++;
+    (*cmp_count) += depth;
+    __bst_rec_cmp_count(node->left, nodes_count, cmp_count, depth + 1);
+    __bst_rec_cmp_count(node->right, nodes_count, cmp_count, depth + 1);
+}
+
+double bst_get_mean_cmp_count(const node_t *root)
 {
     if (root == NULL)
         return 0;
     
-    double left = bst_mean_search_cmp_count(root->left);
-    double right = bst_mean_search_cmp_count(root->right);
-    return 2 + 0.5 * (left + right);
+    int nodes_count = 0;
+    int cmp_count = 0;
+    int depth = 1;
+    __bst_rec_cmp_count(root, &nodes_count, &cmp_count, depth);
+    return (double)cmp_count / nodes_count;
+}
+
+static size_t __count_nodes(const node_t *node)
+{
+    if (node == NULL)
+        return 0;
+    
+    return 1 + __count_nodes(node->left) + __count_nodes(node->right);
+}
+
+size_t bst_sizeof(const node_t *root)
+{
+    return __count_nodes(root) * sizeof(node_t);
 }
 
 void bst_destroy(node_t *root)
