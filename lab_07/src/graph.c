@@ -204,7 +204,12 @@ static void __roads_print(int *arr, int size)
     printf("\n");
 
     for (int i = 0; i < size; i++)
-        printf("%d\t", arr[i]);
+    {
+        if (arr[i] == INT_MAX)
+            printf("_\t");
+        else
+            printf("%d\t", arr[i]);
+    }
     printf("\n");
 }
 

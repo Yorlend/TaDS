@@ -21,6 +21,24 @@ int prompt_T(int *size)
     if (scanf("%d", &tmp) != 1)
         printf("Input NaN.\n");
     else if (tmp <= 0)
+        printf("Negative input or 0.\n");
+    else
+    {
+        *size = tmp;
+        return EXIT_SUCCESS;
+    }
+    
+    return EXIT_FAILURE;
+}
+
+int prompt_src(int *size, int maxsize)
+{
+    int tmp = 0;
+
+    printf("Input src: ");
+    if (scanf("%d", &tmp) != 1)
+        printf("Input NaN.\n");
+    else if (tmp < 0 || tmp >= maxsize)
         printf("Incorrect input.\n");
     else
     {
@@ -35,15 +53,18 @@ int main(void)
 {
     char filename[256];
     int status = EXIT_SUCCESS;
-    int T;
+    int T = 0, src = 0;
 
     status = prompt_T(&T);
 
-    status = prompt_file_name(filename);
+    if (status == EXIT_SUCCESS)
+        status = prompt_file_name(filename);
 
     graph_t graph = { .adjmat = NULL, .size = 0 };
 
-    status = graph_input(&graph, "graph.txt");
+    if (status == EXIT_SUCCESS)
+        status = graph_input(&graph, "graph.txt");
+
     if (status != EXIT_SUCCESS)
         printf("Incorrect input!\n");
     else
@@ -51,12 +72,19 @@ int main(void)
         // debug_out(&graph);
         graph_output(&graph, "out");
 
-        bool res = graph_reachable(&graph, 10, 0);
+        status = prompt_src(&src, graph.size);
 
-        if (res == true)
-            printf("Reachable\n");
+        if (status == EXIT_SUCCESS)
+        {
+            bool res = graph_reachable(&graph, T, src);
 
-        graph_output(&graph, "reach");
+            if (res == true)
+                printf("Reachable\n");
+            else
+                printf("Unreachable\n");
+
+            graph_output(&graph, "reach");
+        }
     }
 
     graph_free(&graph);
