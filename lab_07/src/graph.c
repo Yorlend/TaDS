@@ -197,6 +197,17 @@ int __dijkstra_check(int* arr, int size, int T)
     return -1;
 }
 
+static void __roads_print(int *arr, int size)
+{
+    for (int i = 0; i < size; i++)
+        printf("%d\t", i);
+    printf("\n");
+
+    for (int i = 0; i < size; i++)
+        printf("%d\t", arr[i]);
+    printf("\n");
+}
+
 bool graph_reachable(const graph_t *graph, int T, int src)
 {
     int n1 = 0, n2 = 0, n3 = 0;
@@ -227,6 +238,8 @@ bool graph_reachable(const graph_t *graph, int T, int src)
             }
         }
     }
+
+    __roads_print(arr, graph->size);
 
     free(arr);
     if (unreachable != -1)
