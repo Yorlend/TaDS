@@ -1,7 +1,7 @@
 CC 		:= gcc
 CFLAGS 	:= -std=c99 -Wall -Werror -pedantic -Iinc
 SRCS 	:= $(shell find src -name "*.c")
-OBJS	:= $(SRCS:src/%.c:out/%.o)
+OBJS	:= $(SRCS:src/%.c=out/%.o)
 
 .PHONY: clean
 
