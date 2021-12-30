@@ -1,0 +1,33 @@
+digraph g {
+    null24 [shape=point];
+    11.7 -> null24;
+    11.7 -> 12.6;
+    null25 [shape=point];
+    12.6 -> null25;
+    12.6 -> 13.5;
+    null26 [shape=point];
+    13.5 -> null26;
+    13.5 -> 141.4;
+    141.4 -> 15.3;
+    null27 [shape=point];
+    15.3 -> null27;
+    15.3 -> 55.1;
+    null28 [shape=point];
+    55.1 -> null28;
+    null29 [shape=point];
+    55.1 -> null29;
+    141.4 -> 918.3;
+    918.3 -> 284.2;
+    284.2 -> 183.1;
+    null30 [shape=point];
+    183.1 -> null30;
+    null31 [shape=point];
+    183.1 -> null31;
+    null32 [shape=point];
+    284.2 -> null32;
+    918.3 -> 1741.1;
+    null33 [shape=point];
+    1741.1 -> null33;
+    null34 [shape=point];
+    1741.1 -> null34;
+}
